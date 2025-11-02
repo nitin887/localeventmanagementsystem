@@ -3,11 +3,13 @@ package com.localeventmanagementsysytem.localeventmanagementsystem.entity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Table(name = "Event")
-public class Event {
+public class Event extends Manager{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,16 +17,12 @@ public class Event {
     @Column(nullable = false)
     private  String  eventName;
 
-    @Column(nullable = false)
-    private String eventManagerName;
+
 
     @Column(nullable = false)
     private String eventVenue;
 
-    @Column(nullable = false)
-    private String  eventManagerEmail;
 
-    private  Long eventManagerPhone;
 
     @Column(nullable = false)
     private  String eventInfo;
