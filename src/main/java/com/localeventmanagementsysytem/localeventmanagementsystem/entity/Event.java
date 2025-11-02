@@ -1,33 +1,38 @@
 package com.localeventmanagementsysytem.localeventmanagementsystem.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+import java.time.LocalDateTime;
+
 @Entity
 @Data
-@Table(name = "Event")
-public class Event extends Manager{
+@Table(name = "events")
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private  String  eventName;
+    private String title;
 
+    @Column(length = 1000)
+    private String description;
 
+    private String category;
 
-    @Column(nullable = false)
-    private String eventVenue;
+    private String location;
 
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
+    private Integer maxAttendees;
 
-    @Column(nullable = false)
-    private  String eventInfo;
+    @Enumerated(EnumType.STRING)
+    private EventStatus status;
 
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User createdBy;
 
-
-
+    private LocalDateTime createdAt;
 }
