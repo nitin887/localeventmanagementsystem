@@ -9,85 +9,90 @@ import com.localeventmanagementsysytem.localeventmanagementsystem.service.servic
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class EventService implements EventServiceInterface {
-    private EventRepository eventRepository;
-    private EventMapper eventMapper;
+    private final EventRepository eventRepository;
+    private final EventMapper eventMapper;
 
     @Override
     public EventDto createEvent(EventDto eventDto) {
-        eventRepository.findById(eventDto.getId()).orElseThrow(()->new EventNotFoundException("event not found with id: "+eventDto.getId()));
-        Event creatingEvent =eventMapper.toEventEntity(eventDto);
-        creatingEvent =eventRepository.save(creatingEvent);
-        return eventMapper.toEventDto(creatingEvent);
+        Event event = eventMapper.toEventEntity(eventDto);
+        event = eventRepository.save(event);
+        return eventMapper.toEventDto(event);
     }
 
     @Override
     public EventDto updateEvent(EventDto eventDto, Long id) {
-        Event updatingEvent =eventRepository.findById(id).orElseThrow(()->new EventNotFoundException("event not found with id:"+id));
-        updatingEvent.setTitle(eventDto.getTitle());
-        updatingEvent.setId(eventDto.getId());
-        updatingEvent.setCategory(eventDto.getCategory());
-        updatingEvent.setCreatedAt(eventDto.getCreatedAt());
-        updatingEvent.setDescription(eventDto.getDescription());
-        updatingEvent.setEndTime(eventDto.getEndTime());
-        updatingEvent.setStartTime(eventDto.getStartTime());
-        updatingEvent.setLocation(eventDto.getLocation());
-        updatingEvent.setMaxAttendees(eventDto.getMaxAttendees());
-        updatingEvent.setStatus(eventDto.getStatus());
-        updatingEvent=eventRepository.save(updatingEvent);
-        return eventMapper.toEventDto(updatingEvent);
+        Event existingEvent = eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException("Event not found with id: " + id));
+        existingEvent.setTitle(eventDto.getTitle());
+        existingEvent.setDescription(eventDto.getDescription());
+        existingEvent.setCategory(eventDto.getCategory());
+        existingEvent.setLocation(eventDto.getLocation());
+        existingEvent.setStartTime(eventDto.getStartTime());
+        existingEvent.setEndTime(eventDto.getEndTime());
+        existingEvent.setMaxAttendees(eventDto.getMaxAttendees());
+        existingEvent.setStatus(eventDto.getStatus());
+        existingEvent = eventRepository.save(existingEvent);
+        return eventMapper.toEventDto(existingEvent);
     }
 
     @Override
-    public EventDto deleteEvent(Long id) {
-        Event deletingEvent =eventRepository.findById(id).orElseThrow(()->new EventNotFoundException("event not found with id: "+id));
-        eventRepository.delete(deletingEvent);
-        return eventMapper.toEventDto(deletingEvent);
+    public void deleteEvent(Long id) {
+        eventRepository.deleteById(id);
     }
 
     @Override
-    public List<EventDto> getEventById(Long id) {
-        return Collections.singletonList(eventRepository.findById(id).map(eventMapper::toEventDto).orElseThrow(() -> new EventNotFoundException("event not found with id: " + id)));
+    public EventDto getEventById(Long id) {
+        return eventRepository.findById(id).map(eventMapper::toEventDto).orElseThrow(() -> new EventNotFoundException("Event not found with id: " + id));
     }
 
     @Override
     public List<EventDto> getAllEvents() {
-        return eventRepository.findAll().stream().map(eventMapper::toEventDto).toList();
+        return eventRepository.findAll().stream().map(eventMapper::toEventDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<EventDto> getEventByName(String name) {
-        return Collections.singletonList(eventRepository.findByTitle(name).map(eventMapper::toEventDto).orElseThrow(() -> new EventNotFoundException("event not found with name: " + name)));
-    }
-
-
-    @Override
-    public List<EventDto> getEventByDate(String date) {
-        return null;
+    public List<EventDto> getEventByTitle(String title) {
+        return eventRepository.findByTitleContaining(title).stream().map(eventMapper::toEventDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<EventDto> getEventByTime(String time) {
-        return null;
+    public List<EventDto> getEventByDescription(String description) {
+        return eventRepository.findByDescriptionContaining(description).stream().map(eventMapper::toEventDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventDto> getEventByDate(LocalDate date) {
+        return eventRepository.findByStartTimeBetween(date.atStartOfDay(), date.atTime(LocalTime.MAX)).stream().map(eventMapper::toEventDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventDto> getEventByTime(LocalTime time) {
+        // This is not an efficient query. For better performance, consider querying by date first.
+        return eventRepository.findAll().stream()
+                .filter(event -> event.getStartTime().toLocalTime().equals(time))
+                .map(eventMapper::toEventDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<EventDto> getEventByLocation(String location) {
-        return null;
+        return eventRepository.findByLocation(location).stream().map(eventMapper::toEventDto).collect(Collectors.toList());
     }
 
     @Override
     public List<EventDto> getEventByCategory(String category) {
-        return null;
+        return eventRepository.findByCategory(category).stream().map(eventMapper::toEventDto).collect(Collectors.toList());
     }
 
     @Override
     public List<EventDto> getEventByOrganizer(String organizer) {
-        return null;
+        return eventRepository.findByCreatedBy_Username(organizer).stream().map(eventMapper::toEventDto).collect(Collectors.toList());
     }
 }

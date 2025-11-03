@@ -10,13 +10,13 @@ public interface CategoryServiceInterface {
     //update category by id
     CategoryDto updateCategory(CategoryDto categoryDto, Long id);
     //delete category by id
-    CategoryDto deleteCategory(Long id);
+    void deleteCategory(Long id);
     //get category by id
-    List<CategoryDto> getCategoryById(Long id);
+    CategoryDto getCategoryById(Long id);
     //get all categories
     List<CategoryDto> getAllCategories();
     //get category by name
-    List<CategoryDto> getCategoryByName(String name);
+    CategoryDto getCategoryByName(String name);
     //get category by description
     List<CategoryDto> getCategoryByDescription(String description);
 

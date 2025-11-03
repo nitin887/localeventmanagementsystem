@@ -4,12 +4,10 @@ import com.localeventmanagementsysytem.localeventmanagementsystem.entity.Registr
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
-    Optional<Registration> findByUserIdAndEventId(Long userId, Long eventId);
-    Optional<Registration> findByUserId(Long userId);
-    Optional<Registration> findByEventId(Long eventId);
-    Optional<Registration> findById(Long id);
+    List<Registration> findByEventId(Long eventId);
+    List<Registration> findByUserId(Long userId);
 }

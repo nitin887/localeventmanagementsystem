@@ -1,6 +1,8 @@
 package com.localeventmanagementsysytem.localeventmanagementsystem.service;
 
 import com.localeventmanagementsysytem.localeventmanagementsystem.dto.RegistrationDto;
+import com.localeventmanagementsysytem.localeventmanagementsystem.entity.Registration;
+import com.localeventmanagementsysytem.localeventmanagementsystem.exception.RegistrationNotFoundException;
 import com.localeventmanagementsysytem.localeventmanagementsystem.mapper.RegistrationMapper;
 import com.localeventmanagementsysytem.localeventmanagementsystem.repository.RegistrationRepository;
 import com.localeventmanagementsysytem.localeventmanagementsystem.service.serviceinterface.RegistrationServiceInterface;
@@ -8,64 +10,39 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class RegistrationService implements RegistrationServiceInterface {
-    private RegistrationRepository registrationRepository;
-    private RegistrationMapper registrationMapper;
+
+    private final RegistrationRepository registrationRepository;
+    private final RegistrationMapper registrationMapper;
+
     @Override
     public RegistrationDto createRegistration(RegistrationDto registrationDto) {
-        return null;
+        Registration registration = registrationMapper.toRegistrationEntity(registrationDto);
+        registration = registrationRepository.save(registration);
+        return registrationMapper.toRegistrationDto(registration);
     }
 
     @Override
-    public RegistrationDto updateRegistration(RegistrationDto registrationDto, Long id) {
-        return null;
+    public RegistrationDto getRegistrationById(Long id) {
+        return registrationRepository.findById(id).map(registrationMapper::toRegistrationDto).orElseThrow(() -> new RegistrationNotFoundException("Registration not found with id: " + id));
     }
 
     @Override
-    public RegistrationDto deleteRegistration(Long id) {
-        return null;
+    public List<RegistrationDto> getRegistrationsByEventId(Long eventId) {
+        return registrationRepository.findByEventId(eventId).stream().map(registrationMapper::toRegistrationDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<RegistrationDto> getRegistrationById(Long id) {
-        return null;
+    public List<RegistrationDto> getRegistrationsByUserId(Long userId) {
+        return registrationRepository.findByUserId(userId).stream().map(registrationMapper::toRegistrationDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<RegistrationDto> getAllRegistrations() {
-        return null;
-    }
-
-    @Override
-    public List<RegistrationDto> getRegistrationByEvent(String event) {
-        return null;
-    }
-
-    @Override
-    public List<RegistrationDto> getRegistrationByDate(String date) {
-        return null;
-    }
-
-    @Override
-    public List<RegistrationDto> getRegistrationByTime(String time) {
-        return null;
-    }
-
-    @Override
-    public List<RegistrationDto> getRegistrationByLocation(String location) {
-        return null;
-    }
-
-    @Override
-    public List<RegistrationDto> getRegistrationByCategory(String category) {
-        return null;
-    }
-
-    @Override
-    public List<RegistrationDto> getRegistrationByOrganizer(String organizer) {
-        return null;
+    public void deleteRegistration(Long id) {
+        registrationRepository.deleteById(id);
     }
 }

@@ -10,7 +10,6 @@ import com.localeventmanagementsysytem.localeventmanagementsystem.service.servic
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,22 +33,18 @@ public class CategoryService implements CategoryServiceInterface {
     public CategoryDto updateCategory(CategoryDto categoryDto, Long id) {
        Category updatingCategory =categoryRepository.findById(id).orElseThrow(()-> new CategoryNotFoundException("category not found with id: "+id));
        updatingCategory.setName(categoryDto.getName());
-       updatingCategory.setId(categoryDto.getId());
        updatingCategory=categoryRepository.save(updatingCategory);
        return categoryMapper.toCategoryDto(updatingCategory);
     }
 
     @Override
-    public CategoryDto deleteCategory(Long id) {
-      Category deletingCategory =categoryRepository.findById(id).orElseThrow(()->new CategoryNotFoundException("category not found with id: "+id));
-      categoryRepository.delete(deletingCategory);
-      return categoryMapper.toCategoryDto(deletingCategory);
-      
+    public void deleteCategory(Long id) {
+      categoryRepository.deleteById(id);
     }
 
     @Override
-    public List<CategoryDto> getCategoryById(Long id) {
-        return Collections.singletonList(categoryRepository.findById(id).map(categoryMapper::toCategoryDto).orElseThrow(() -> new CategoryNotFoundException("category not found with id: " + id)));
+    public CategoryDto getCategoryById(Long id) {
+        return categoryRepository.findById(id).map(categoryMapper::toCategoryDto).orElseThrow(()->new CategoryNotFoundException("category not found with id: "+id));
     }
 
     @Override
@@ -58,8 +53,8 @@ public class CategoryService implements CategoryServiceInterface {
     }
 
     @Override
-    public List<CategoryDto> getCategoryByName(String name) {
-        return Collections.singletonList(categoryRepository.findByName(name).map(categoryMapper::toCategoryDto).orElseThrow(() -> new CategoryNotFoundException("category not found with name: " + name)));
+    public CategoryDto getCategoryByName(String name) {
+        return categoryRepository.findByName(name).map(categoryMapper::toCategoryDto).orElseThrow(() -> new CategoryNotFoundException("category not found with name: " + name));
     }
 
     @Override
