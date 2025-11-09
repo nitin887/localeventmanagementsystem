@@ -33,6 +33,7 @@ public class CategoryService implements CategoryServiceInterface {
     public CategoryDto updateCategory(CategoryDto categoryDto, Long id) {
        Category updatingCategory =categoryRepository.findById(id).orElseThrow(()-> new CategoryNotFoundException("category not found with id: "+id));
        updatingCategory.setName(categoryDto.getName());
+       updatingCategory.setDescription(categoryDto.getDescription());
        updatingCategory=categoryRepository.save(updatingCategory);
        return categoryMapper.toCategoryDto(updatingCategory);
     }

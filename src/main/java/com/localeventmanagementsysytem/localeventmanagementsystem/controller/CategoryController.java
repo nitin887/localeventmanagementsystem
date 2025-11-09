@@ -14,41 +14,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryController {
 
-    private final CategoryServiceInterface categorySevice;
+    private final CategoryServiceInterface categoryService;
 
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
-        return new ResponseEntity<>(categorySevice.createCategory(categoryDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(categoryService.createCategory(categoryDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
-        return ResponseEntity.ok(categorySevice.getCategoryById(id));
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        return ResponseEntity.ok(categorySevice.getAllCategories());
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
-        return ResponseEntity.ok(categorySevice.updateCategory(categoryDto, id));
+        return ResponseEntity.ok(categoryService.updateCategory(categoryDto, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categorySevice.deleteCategory(id);
+        categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<CategoryDto> getCategoryByName(@PathVariable String name) {
-        return ResponseEntity.ok(categorySevice.getCategoryByName(name));
+        return ResponseEntity.ok(categoryService.getCategoryByName(name));
     }
 
     @GetMapping("/description/{description}")
     public ResponseEntity<List<CategoryDto>> getCategoryByDescription(@PathVariable String description) {
-        return ResponseEntity.ok(categorySevice.getCategoryByDescription(description));
+        return ResponseEntity.ok(categoryService.getCategoryByDescription(description));
     }
 }
