@@ -42,12 +42,12 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<CategoryDto> getCategoryByName(@PathVariable String name) {
         return ResponseEntity.ok(categorySevice.getCategoryByName(name));
     }
 
-    @GetMapping("/{description}")
+    @GetMapping("/description/{description}")
     public ResponseEntity<List<CategoryDto>> getCategoryByDescription(@PathVariable String description) {
         return ResponseEntity.ok(categorySevice.getCategoryByDescription(description));
     }

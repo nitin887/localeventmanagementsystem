@@ -44,17 +44,17 @@ public class EventController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/title/{title}")
+    @GetMapping("/{title}")
     public ResponseEntity<List<EventDto>> getEventByTitle(@PathVariable String title) {
         return ResponseEntity.ok(eventService.getEventByTitle(title));
     }
 
-    @GetMapping("/description/{description}")
+    @GetMapping("/{description}")
     public ResponseEntity<List<EventDto>> getEventByDescription(@PathVariable String description) {
         return ResponseEntity.ok(eventService.getEventByDescription(description));
     }
 
-    @GetMapping("/date/{date}")
+    @GetMapping("/{date}")
     public ResponseEntity<List<EventDto>> getEventByDate(@PathVariable LocalDate date) {
         return ResponseEntity.ok(eventService.getEventByDate(date));
     }
