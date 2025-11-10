@@ -1,11 +1,18 @@
 package com.localeventmanagementsysytem.localeventmanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +22,7 @@ public class User {
     private String username;
 
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Registration> registrations;
 }

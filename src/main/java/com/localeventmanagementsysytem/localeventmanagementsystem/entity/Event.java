@@ -1,13 +1,21 @@
 package com.localeventmanagementsysytem.localeventmanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = "createdBy")
 @Table(name = "events")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +43,7 @@ public class Event {
     private User createdBy;
 
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "event")
+    private List<Registration> registrations;
 }

@@ -1,13 +1,20 @@
 package com.localeventmanagementsysytem.localeventmanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"event", "user"})
 @Table(name = "registrations")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Registration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

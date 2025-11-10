@@ -2,6 +2,7 @@ package com.localeventmanagementsysytem.localeventmanagementsystem.service;
 
 import com.localeventmanagementsysytem.localeventmanagementsystem.dto.EventDto;
 import com.localeventmanagementsysytem.localeventmanagementsystem.entity.Event;
+import com.localeventmanagementsysytem.localeventmanagementsystem.entity.EventStatus;
 import com.localeventmanagementsysytem.localeventmanagementsystem.exception.EventNotFoundException;
 import com.localeventmanagementsysytem.localeventmanagementsystem.mapper.EventMapper;
 import com.localeventmanagementsysytem.localeventmanagementsystem.repository.EventRepository;
@@ -28,7 +29,7 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
-    public EventDto updateEvent(EventDto eventDto, Long id) {
+    public EventDto updateEvent(Long id, EventDto eventDto) {
         Event existingEvent = eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException("Event not found with id: " + id));
         existingEvent.setTitle(eventDto.getTitle());
         existingEvent.setDescription(eventDto.getDescription());
@@ -94,5 +95,10 @@ public class EventService implements EventServiceInterface {
     @Override
     public List<EventDto> getEventByOrganizer(String organizer) {
         return eventRepository.findByCreatedBy_Username(organizer).stream().map(eventMapper::toEventDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventDto> getEventsByStatus(EventStatus status) {
+        return eventRepository.findByStatus(status).stream().map(eventMapper::toEventDto).collect(Collectors.toList());
     }
 }

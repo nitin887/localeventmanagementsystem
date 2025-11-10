@@ -39,7 +39,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDto categoryDto) {
-        return ResponseEntity.ok(categoryService.updateCategory(categoryDto, id));
+        return ResponseEntity.ok(categoryService.updateCategory(id, categoryDto));
     }
 
     @DeleteMapping("/{id}")

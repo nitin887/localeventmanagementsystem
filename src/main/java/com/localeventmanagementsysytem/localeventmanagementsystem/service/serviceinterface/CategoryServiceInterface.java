@@ -8,7 +8,7 @@ public interface CategoryServiceInterface {
     //create category
     CategoryDto createCategory(CategoryDto categoryDto);
     //update category by id
-    CategoryDto updateCategory(CategoryDto categoryDto, Long id);
+    CategoryDto updateCategory(Long id, CategoryDto categoryDto);
     //delete category by id
     void deleteCategory(Long id);
     //get category by id

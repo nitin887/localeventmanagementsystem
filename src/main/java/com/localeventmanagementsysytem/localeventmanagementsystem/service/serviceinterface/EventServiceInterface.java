@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface EventServiceInterface {
     EventDto createEvent(EventDto eventDto);
-    EventDto updateEvent(EventDto eventDto, Long id);
+    EventDto updateEvent(Long id, EventDto eventDto);
     void deleteEvent(Long id);
     EventDto getEventById(Long id);
     List<EventDto> getAllEvents();
@@ -20,5 +20,5 @@ public interface EventServiceInterface {
     List<EventDto> getEventByLocation(String location);
     List<EventDto> getEventByCategory(String category);
     List<EventDto> getEventByOrganizer(String organizer);
-
+    List<EventDto> getEventsByStatus(EventStatus status);
 }

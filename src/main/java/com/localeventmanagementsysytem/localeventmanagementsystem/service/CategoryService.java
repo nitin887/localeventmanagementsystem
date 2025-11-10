@@ -30,7 +30,7 @@ public class CategoryService implements CategoryServiceInterface {
     }
 
     @Override
-    public CategoryDto updateCategory(CategoryDto categoryDto, Long id) {
+    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
        Category updatingCategory =categoryRepository.findById(id).orElseThrow(()-> new CategoryNotFoundException("category not found with id: "+id));
        updatingCategory.setName(categoryDto.getName());
        updatingCategory.setDescription(categoryDto.getDescription());

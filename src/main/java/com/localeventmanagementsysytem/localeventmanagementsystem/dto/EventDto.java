@@ -1,8 +1,6 @@
 package com.localeventmanagementsysytem.localeventmanagementsystem.dto;
 
 import com.localeventmanagementsysytem.localeventmanagementsystem.entity.EventStatus;
-import com.localeventmanagementsysytem.localeventmanagementsystem.entity.User;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +21,6 @@ public class EventDto {
     private LocalDateTime endTime;
     private Integer maxAttendees;
     private EventStatus status;
-    private UserDto createdBy;
+    private Long createdBy;
     private LocalDateTime createdAt;
 }
